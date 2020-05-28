@@ -27,6 +27,7 @@ public class GUI {
         JLabel labelInput = new JLabel("Исходная строка");
         JLabel labelOutput = new JLabel("Результат");
         JLabel labelKey = new JLabel("Ключ шифрования");
+        JLabel labelTime = new JLabel("mc");
 
         //Текстовые поля
         JTextArea textInput = new JTextArea(1,20);
@@ -36,6 +37,7 @@ public class GUI {
         textOutput.setLineWrap(true);
         textOutput.setWrapStyleWord(true);
         JTextField textKey = new JTextField(5);
+        JTextField textTime = new JTextField(5);
 
         //Создадим кнопки
         JButton encrypt = new JButton("Зашифровать");
@@ -46,12 +48,14 @@ public class GUI {
         //Событие для кнопки "Зашифровать"
         encrypt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                long startTime = System.currentTimeMillis();
                 String string = textInput.getText();
                 try {
                     int key = Integer.parseInt(textKey.getText());
                     if (key >= 0) {
                         String encryptedString = Caesar.encrypt(string, key);
                         textOutput.setText(encryptedString);
+                        textTime.setText(String.valueOf(System.currentTimeMillis() - startTime));
                     } else
                         textOutput.setText("Введите неотрицательный ключ шифрования");
                 }
@@ -65,12 +69,14 @@ public class GUI {
         //Событие для кнопки "Расшифровать"
         decrypt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                long startTime = System.currentTimeMillis();
                 String string = textInput.getText();
                 try {
                     int key = Integer.parseInt(textKey.getText());
                     if (key >= 0) {
                         String decriptedString = Caesar.decrypt(string, key);
                         textOutput.setText(decriptedString);
+                        textTime.setText(String.valueOf(System.currentTimeMillis() - startTime));
                     } else
                         textOutput.setText("Введите неотрицательный ключ шифрования");
                 }
@@ -88,16 +94,29 @@ public class GUI {
             }
         });
 
+        //Добавим панель прокрутки для текстовых полей
+        JScrollPane scrollPaneInput = new JScrollPane(textInput);
+        scrollPaneInput.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneInput.setPreferredSize(new Dimension(250, 100));
+
+        JScrollPane scrollPaneOutput = new JScrollPane(textOutput);
+        scrollPaneOutput.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneOutput.setPreferredSize(new Dimension(250, 100));
+
         //Добавим кнопки и поля на панель
         topPanel.add(labelInput);
-        topPanel.add(textInput);
+        topPanel.add(scrollPaneInput);
         topPanel.add(labelKey);
         topPanel.add(textKey);
         centerPanel.add(encrypt);
         centerPanel.add(decrypt);
         bottomPanel.add(labelOutput);
-        bottomPanel.add(textOutput);
+        bottomPanel.add(scrollPaneOutput);
         bottomPanel.add(copyButton);
+        bottomPanel.add(textTime);
+        bottomPanel.add(labelTime);
 
         //Добавим панели в окно и настроим
         FRAME.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
@@ -105,7 +124,7 @@ public class GUI {
         FRAME.getContentPane().add(BorderLayout.CENTER, centerPanel);
 
         FRAME.pack();
-        FRAME.setSize(700, 200);
+        FRAME.setSize(700, 300);
         FRAME.setLocationRelativeTo(null);
         FRAME.setVisible(true);
         FRAME.setResizable(true);

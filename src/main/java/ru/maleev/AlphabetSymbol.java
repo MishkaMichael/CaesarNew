@@ -1,11 +1,12 @@
 package ru.maleev;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AlphabetSymbol {
-        char symbol;
-        int index;
-        List<Character> alphabet;
+        private char symbol;
+        private int index;
+        private List<Character> alphabet;
 
     public AlphabetSymbol(char symbol, int index, List<Character> alphabet) {
         this.symbol = symbol;

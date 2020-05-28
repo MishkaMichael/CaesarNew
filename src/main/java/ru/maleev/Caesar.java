@@ -1,5 +1,6 @@
 package ru.maleev;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,6 +15,16 @@ public class Caesar {               // программа реализует ш�
         System.out.println("Encrypt:" + encryptString);
         String decryptString = decrypt(s, testKey);
         System.out.println("Decrypt:" + decryptString);
+    }
+
+    public static HashMap<Character, AlphabetSymbol> createSymbolHashMap () {
+        HashMap<Character, AlphabetSymbol> symbolHashMap = new HashMap<>();
+        for (List<Character> alp: Alphabet.all) {
+            for (int i = 0; i < alp.size(); i++) {
+                symbolHashMap.put(alp.get(i), new AlphabetSymbol (alp.get(i), i, alp));
+            }
+        }
+        return symbolHashMap;
     }
 
     public static String encrypt(String s, int key) {  // метод шифрования
@@ -37,20 +48,25 @@ public class Caesar {               // программа реализует ш�
     }
 
     private static char encryptChar(int key, char ch) {
-        for (List<Character> alphabet: Alphabet.all) {
-            if (alphabet.contains(ch)) return alphabet.get((alphabet.indexOf(ch) + key) % alphabet.size());
+        HashMap<Character, AlphabetSymbol> symbolHashMap = createSymbolHashMap();
+        if (symbolHashMap.containsKey(ch)) {
+            int index = symbolHashMap.get(ch).getIndex();
+            List<Character> alphabet = symbolHashMap.get(ch).getAlphabet();
+            int newIndex = (index + key) % alphabet.size();
+            return alphabet.get(newIndex);
         }
         return ch;
     }
 
     private static char decryptChar(int key, char ch) {
-        for (List<Character> alphabet: Alphabet.all) {
-            if (alphabet.contains(ch)) {
-                if ((alphabet.indexOf(ch) - key % alphabet.size()) < 0) {
-                    ch = alphabet.get(alphabet.size() - (key % alphabet.size() - alphabet.indexOf(ch)));
-                } else ch = alphabet.get(alphabet.indexOf(ch) - key % alphabet.size());
-                return ch;
-            }
+        HashMap<Character, AlphabetSymbol> symbolHashMap = createSymbolHashMap();
+
+        if (symbolHashMap.containsKey(ch)) {
+            int index = symbolHashMap.get(ch).getIndex();
+            List<Character> alphabet = symbolHashMap.get(ch).getAlphabet();
+            int newIndex = index - key % alphabet.size();
+            if (newIndex < 0) newIndex = alphabet.size() - (key % alphabet.size() - index);
+            return alphabet.get(newIndex);
         }
         return ch;
     }
