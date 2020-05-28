@@ -74,8 +74,8 @@ public class GUI {
                 try {
                     int key = Integer.parseInt(textKey.getText());
                     if (key >= 0) {
-                        String decriptedString = Caesar.decrypt(string, key);
-                        textOutput.setText(decriptedString);
+                        String decryptedString = Caesar.decrypt(string, key);
+                        textOutput.setText(decryptedString);
                         textTime.setText(String.valueOf(System.currentTimeMillis() - startTime));
                     } else
                         textOutput.setText("Введите неотрицательный ключ шифрования");

@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 public class Caesar {               // программа реализует шифр Цезаря - сдвиг всех алфавитных символов строки на определенное число символов вправо
 
+    static final HashMap<Character, AlphabetSymbol> SYMBOL_HASH_MAP = createSymbolHashMap();
+
     public static void main(String[] args) {
         int testKey = 34;
         System.out.println("Введите текст");
@@ -48,10 +50,9 @@ public class Caesar {               // программа реализует ш�
     }
 
     private static char encryptChar(int key, char ch) {
-        HashMap<Character, AlphabetSymbol> symbolHashMap = createSymbolHashMap();
-        if (symbolHashMap.containsKey(ch)) {
-            int index = symbolHashMap.get(ch).getIndex();
-            List<Character> alphabet = symbolHashMap.get(ch).getAlphabet();
+        if (SYMBOL_HASH_MAP.containsKey(ch)) {
+            int index = SYMBOL_HASH_MAP.get(ch).getIndex();
+            List<Character> alphabet = SYMBOL_HASH_MAP.get(ch).getAlphabet();
             int newIndex = (index + key) % alphabet.size();
             return alphabet.get(newIndex);
         }
@@ -59,11 +60,9 @@ public class Caesar {               // программа реализует ш�
     }
 
     private static char decryptChar(int key, char ch) {
-        HashMap<Character, AlphabetSymbol> symbolHashMap = createSymbolHashMap();
-
-        if (symbolHashMap.containsKey(ch)) {
-            int index = symbolHashMap.get(ch).getIndex();
-            List<Character> alphabet = symbolHashMap.get(ch).getAlphabet();
+        if (SYMBOL_HASH_MAP.containsKey(ch)) {
+            int index = SYMBOL_HASH_MAP.get(ch).getIndex();
+            List<Character> alphabet = SYMBOL_HASH_MAP.get(ch).getAlphabet();
             int newIndex = index - key % alphabet.size();
             if (newIndex < 0) newIndex = alphabet.size() - (key % alphabet.size() - index);
             return alphabet.get(newIndex);
